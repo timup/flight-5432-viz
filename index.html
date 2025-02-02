@@ -6,12 +6,19 @@
     <script src="https://cdn.plot.ly/plotly-2.16.1.min.js"></script>
   </head>
   <body>
-    <div id="rwyPlot" style="width: 1600px; height: 900px; border: 1px solid #ccc"></div>
+    <div
+      id="rwyPlot"
+      style="width: 1600px; height: 900px; border: 1px solid #ccc"
+    ></div>
     <div style="margin-top: 10px">
       <button id="btn-approach">Approach View</button>
       <button id="btn-overhead">Overhead View</button>
-      <button id="btn-toggle-approach-corridor">Toggle Approach Corridor</button>
-      <button id="btn-toggle-crossing-corridor">Toggle Crossing Corridor</button>
+      <button id="btn-toggle-approach-corridor">
+        Toggle Approach Corridor
+      </button>
+      <button id="btn-toggle-crossing-corridor">
+        Toggle Crossing Corridor
+      </button>
     </div>
 
     <script>
@@ -33,7 +40,10 @@
         y: yRunway,
         z: zRunway,
         type: "surface",
-        colorscale: [["0", "#333333"], ["1", "#333333"]],
+        colorscale: [
+          ["0", "#333333"],
+          ["1", "#333333"],
+        ],
         showscale: false,
         showlegend: false,
         opacity: 1,
@@ -77,7 +87,8 @@
         const startVerticalOffset = Math.cos(angle) * radius * 200 + 100;
         const angleVariation = (Math.random() * 2 - 1) * 5 * radius;
         const endLateralOffset = Math.sin(angle) * radius * 2000;
-        const endVerticalOffset = Math.random() * 25 * Math.pow(Math.random(), 2) + 10;
+        const endVerticalOffset =
+          Math.random() * 25 * Math.pow(Math.random(), 2) + 10;
         const endXOffset = -Math.random() * 100;
         const lateralNoise = createNoise(100);
         const verticalNoise = createNoise(20);
@@ -92,16 +103,25 @@
           const progress = j / (POINTS_PER_PATH - 1);
           const dist = -100 + progress * (MAX_DISTANCE + 100);
           const curveFactor = Math.pow(progress, 1.8);
-          const lateralOffset = startLateralOffset * (1 - curveFactor) + endLateralOffset * curveFactor;
-          const effectiveGlideslope = GLIDESLOPE_ANGLE + (angleVariation * (Math.PI / 180)) * curveFactor;
+          const lateralOffset =
+            startLateralOffset * (1 - curveFactor) +
+            endLateralOffset * curveFactor;
+          const effectiveGlideslope =
+            GLIDESLOPE_ANGLE + angleVariation * (Math.PI / 180) * curveFactor;
           const noiseScale = curveFactor;
-          const currentLateralPos = lateralOffset + lateralNoise[j] * noiseScale;
-          const nominalHeight = Math.tan(effectiveGlideslope) * (dist + endXOffset * (1 - curveFactor));
-          
+          const currentLateralPos =
+            lateralOffset + lateralNoise[j] * noiseScale;
+          const nominalHeight =
+            Math.tan(effectiveGlideslope) *
+            (dist + endXOffset * (1 - curveFactor));
+
           const minHeight = Math.min(40, 5 + Math.abs(dist) / 100);
           const currentVerticalPos = Math.max(
             minHeight,
-            nominalHeight + (startVerticalOffset * curveFactor + endVerticalOffset * (1 - curveFactor)) + verticalNoise[j] * noiseScale
+            nominalHeight +
+              (startVerticalOffset * curveFactor +
+                endVerticalOffset * (1 - curveFactor)) +
+              verticalNoise[j] * noiseScale
           );
 
           xPath.push(dist);
@@ -143,7 +163,10 @@
           const xPos = 500 + xOffset + progress * 1500;
           const noiseScale = Math.sin(progress * Math.PI);
           const currentLateralPos = yPos + lateralNoise[j] * noiseScale;
-          const currentHeight = Math.max(50, heightOffset + verticalNoise[j] * noiseScale);
+          const currentHeight = Math.max(
+            50,
+            heightOffset + verticalNoise[j] * noiseScale
+          );
 
           xPath.push(xPos);
           yPath.push(currentLateralPos);
@@ -192,29 +215,29 @@
 
       const cameraPresets = {
         approach: {
-          'scene.camera': {
+          "scene.camera": {
             eye: { x: 3, y: -3, z: 1 },
             center: { x: 0, y: 0, z: 0 },
-            up: { x: 0, y: 0, z: 1 }
+            up: { x: 0, y: 0, z: 1 },
           },
-          'scene.aspectmode': 'manual',
-          'scene.zaxis.showgrid': true,
-          'scene.zaxis.showline': true,
-          'scene.zaxis.showticklabels': true,
-          'scene.zaxis.title.text': 'Altitude (m)'
+          "scene.aspectmode": "manual",
+          "scene.zaxis.showgrid": true,
+          "scene.zaxis.showline": true,
+          "scene.zaxis.showticklabels": true,
+          "scene.zaxis.title.text": "Altitude (m)",
         },
         overhead: {
-          'scene.camera': {
+          "scene.camera": {
             eye: { x: 0, y: 0, z: 3 },
             center: { x: 0, y: 0, z: 0 },
-            up: { x: 0, y: 1, z: 0 }
+            up: { x: 0, y: 1, z: 0 },
           },
-          'scene.aspectmode': 'manual',
-          'scene.zaxis.showgrid': false,
-          'scene.zaxis.showline': false,
-          'scene.zaxis.showticklabels': false,
-          'scene.zaxis.title.text': ''
-        }
+          "scene.aspectmode": "manual",
+          "scene.zaxis.showgrid": false,
+          "scene.zaxis.showline": false,
+          "scene.zaxis.showticklabels": false,
+          "scene.zaxis.title.text": "",
+        },
       };
 
       Plotly.newPlot("rwyPlot", allTraces, layout).then(() => {
@@ -234,15 +257,23 @@
         Plotly.relayout("rwyPlot", cameraPresets.overhead);
       });
 
-      document.getElementById("btn-toggle-approach-corridor").addEventListener("click", () => {
-        const update = { visible: !allTraces[approachCorridorIndices[0]].visible };
-        Plotly.restyle("rwyPlot", update, approachCorridorIndices);
-      });
+      document
+        .getElementById("btn-toggle-approach-corridor")
+        .addEventListener("click", () => {
+          const update = {
+            visible: !allTraces[approachCorridorIndices[0]].visible,
+          };
+          Plotly.restyle("rwyPlot", update, approachCorridorIndices);
+        });
 
-      document.getElementById("btn-toggle-crossing-corridor").addEventListener("click", () => {
-        const update = { visible: !allTraces[crossingCorridorIndices[0]].visible };
-        Plotly.restyle("rwyPlot", update, crossingCorridorIndices);
-      });
+      document
+        .getElementById("btn-toggle-crossing-corridor")
+        .addEventListener("click", () => {
+          const update = {
+            visible: !allTraces[crossingCorridorIndices[0]].visible,
+          };
+          Plotly.restyle("rwyPlot", update, crossingCorridorIndices);
+        });
     </script>
   </body>
 </html>
