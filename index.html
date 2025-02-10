@@ -108,7 +108,7 @@
             endLateralOffset * curveFactor;
           const effectiveGlideslope =
             GLIDESLOPE_ANGLE + angleVariation * (Math.PI / 180) * curveFactor;
-          const noiseScale = curveFactor;
+          const noiseScale = curveFactor; // 1.0; ?? WIP - adjust noise scale to be more realistic
           const currentLateralPos =
             lateralOffset + lateralNoise[j] * noiseScale;
           const nominalHeight =
